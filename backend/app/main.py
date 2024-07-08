@@ -1,20 +1,28 @@
-from contextlib import asynccontextmanager
+import logging
 import fastapi
+from contextlib import asynccontextmanager
 from database.utils import create_tables
 from database.initial_data import init_data
-import uvicorn
 from api.v1.routers import router as api_router
-from models.models import PermissionsORM
 from schemas.schemas import UserRead, UserCreate, UserUpdate, PermissionBase
 from users import fastapi_users, auth_backend
 
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler = logging.FileHandler("logs/AuthServiceRequests.log")
+file_handler.setLevel(logging.INFO)
+
+
+logger = logging.getLogger(__name__)
+logger.addHandler(file_handler)
 
 @asynccontextmanager
 async def lifespan(app: fastapi.FastAPI):
+    logger.info("Starting lifespan context manager")
     await create_tables()
     await init_data()
     yield
-
+    logger.info(" Lifespan context manager complete")
 
 app = fastapi.FastAPI(
     lifespan=lifespan,
@@ -45,3 +53,11 @@ app.include_router(
     prefix="/users",
     tags=["users"],
 )
+
+@app.middleware("http")
+async def log_requests(request: fastapi.Request, call_next):
+    logger.info(f"Request: {request.method} {request.url}")
+
+    response = await call_next(request)
+    logger.info(f"Response: {response.status_code}")
+    return response
