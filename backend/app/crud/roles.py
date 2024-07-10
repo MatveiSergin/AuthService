@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from crud.base_crud import BaseCRUD, T
 from database.database import db_session
 from models.models import RolesORM, PermissionsORM
-from schemas.schemas import RoleBase, PermissionBase
+from schemas.schemas import RoleBase, PermissionBase, RequestAccess
 
 
 class RolesCRUD(BaseCRUD):
@@ -34,3 +34,14 @@ class RolesCRUD(BaseCRUD):
                 permissions = [PermissionBase.from_orm(p) for p in orm_object.permissions]
                 schemas_object = RoleBase.from_orm(orm_object).copy(update={"permissions": permissions})
                 return schemas_object
+
+    @classmethod
+    async def check_permissions(cls, role: RolesORM, data: RequestAccess) -> bool:
+        path = data.path
+        method = data.method
+        for permission in role.permissions:
+            if permission.path == path and permission.method == method:
+                return True
+
+        return False
+

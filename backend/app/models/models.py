@@ -36,10 +36,13 @@ class RolesORM(ModelORM):
     users: Mapped[list["UsersORM"]] = relationship(back_populates='role', uselist=False, lazy='selectin')
 
     def __repr__(self):
-        return f'<Roles {self.name}>;{self.permissions};{self.users}>'
+        return f'<Roles {self.name}>;{self.permissions}>'
 class UsersORM(SQLAlchemyBaseUserTableUUID, ModelORM):
     __tablename__ = 'users'
     name: Mapped[str]
     surname: Mapped[str]
     role: Mapped["RolesORM"] = relationship(back_populates='users', uselist=True, lazy='selectin')
     role_id: Mapped[int] = mapped_column(ForeignKey('roles.id', ondelete='CASCADE'))
+
+    def __repr__(self):
+        return f'<Users {self.name} {self.surname} {self.role_id}>'

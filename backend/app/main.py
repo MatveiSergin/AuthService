@@ -1,28 +1,27 @@
-import logging
+import json
+
 import fastapi
 from contextlib import asynccontextmanager
+
+from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi import Request
+from starlette.responses import JSONResponse
+
 from database.utils import create_tables
 from database.initial_data import init_data
 from api.v1.routers import router as api_router
 from schemas.schemas import UserRead, UserCreate, UserUpdate, PermissionBase
 from users import fastapi_users, auth_backend
+from config_log import logger
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler = logging.FileHandler("logs/AuthServiceRequests.log")
-file_handler.setLevel(logging.INFO)
-
-
-logger = logging.getLogger(__name__)
-logger.addHandler(file_handler)
 
 @asynccontextmanager
 async def lifespan(app: fastapi.FastAPI):
     logger.info("Starting lifespan context manager")
     await create_tables()
-    await init_data()
+    #await init_data()
     yield
-    logger.info(" Lifespan context manager complete")
+    logger.info("Lifespan context manager complete")
 
 app = fastapi.FastAPI(
     lifespan=lifespan,
@@ -56,8 +55,9 @@ app.include_router(
 
 @app.middleware("http")
 async def log_requests(request: fastapi.Request, call_next):
-    logger.info(f"Request: {request.method} {request.url}")
+    logger.info(f"\n[MIDDLEWARE] Request: {request.method} {request.url}")
 
     response = await call_next(request)
-    logger.info(f"Response: {response.status_code}")
+    logger.info(f"[MIDDLEWARE] Response: {response.status_code}\n")
     return response
+

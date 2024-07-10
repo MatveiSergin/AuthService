@@ -11,7 +11,6 @@ class PermissionAdd(BaseModel):
     path: str
 
     class Config:
-        orm_mode = True
         from_attributes = True
 
 
@@ -19,7 +18,6 @@ class PermissionBase(PermissionAdd):
     id: int
 
     class Config:
-        orm_mode = True
         from_attributes = True
 
 
@@ -27,7 +25,6 @@ class RoleAdd(BaseModel):
     name: str
 
     class Config:
-        orm_mode = True
         from_attributes = True
 
 
@@ -36,7 +33,6 @@ class RoleBase(RoleAdd):
     permissions: list[PermissionAdd] = []
 
     class Config:
-        orm_mode = True
         from_attributes = True
 
 
@@ -60,3 +56,11 @@ class UserUpdate(schemas.BaseUserUpdate):
 class ResponseSchemas(BaseModel):
     id: Optional[int] = None
     ok: bool = True
+
+
+class RequestAccess(BaseModel):
+    path: str
+    method: str
+
+class ResponseCheck(BaseModel):
+    success: bool
