@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class Settings(BaseSettings):
+class _Settings(BaseSettings):
     DB_DIALECT: str
     DB_DRIVER: str
     DB_USERNAME: str
@@ -16,7 +16,6 @@ class Settings(BaseSettings):
     def DATABASE_URL(self):
         return f"{self.DB_DIALECT}+{self.DB_DRIVER}://{self.DB_USERNAME}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DATABASE}"
 
+    model_config = SettingsConfigDict(env_file="settings/.env")
 
-    model_config = SettingsConfigDict(env_file=".env")
-
-settings = Settings()
+settings = _Settings()

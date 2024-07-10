@@ -10,9 +10,9 @@ from fastapi_users.authentication import (
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from database.utils import get_user_db
 from models.models import UsersORM
-from settings import settings
+from settings.business_settings import business_settings
+from settings.settings import settings
 
-DEFAULT_USER_ID = 1
 SECRET = settings.AUTH_RESET_SECRET
 
 
@@ -53,7 +53,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[UsersORM, uuid.UUID]):
         )
         password = user_dict.pop("password")
         user_dict["hashed_password"] = self.password_helper.hash(password)
-        user_dict["role_id"] = DEFAULT_USER_ID
+        user_dict["role_id"] = business_settings.DEFAULT_USER_ROLE_ID
         created_user = await self.user_db.create(user_dict)
 
         await self.on_after_register(created_user, request)
