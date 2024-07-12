@@ -62,5 +62,7 @@ class RequestAccess(BaseModel):
     path: str
     method: str
 
+    def __repr__(self):
+        return f"path: {self.path}, method: {self.method}"
 class ResponseCheck(BaseModel):
     success: bool

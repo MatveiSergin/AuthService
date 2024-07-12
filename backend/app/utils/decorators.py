@@ -10,7 +10,7 @@ def log_data(func):
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
         logger.info(f'Start <{func.__name__}> with args {args}, kwargs {kwargs}')
-        result = await func(*args, **kwargs)
+        result = await func(**kwargs)
         logger.info(f'End <{func.__name__}> with return: {result}')
         return result
     return wrapper
@@ -22,7 +22,7 @@ def is_admin(func):
         user: UsersORM = kwargs.get('user', None)
         if not user:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        if user.role != business_settings.ADMIN_ROLE:
+        if user.role.name != business_settings.ADMIN_ROLE:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
         return await func(*args, **kwargs)

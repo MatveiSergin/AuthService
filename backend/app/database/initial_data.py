@@ -1,3 +1,4 @@
+from sqlalchemy import update
 from database.database import db_session
 from database.utils import get_user_db
 from models.models import PermissionsORM, RolesORM, UsersORM
@@ -6,11 +7,16 @@ from users import UserManager
 from settings.business_settings import business_settings
 
 async def init_data():
-    perm1 = PermissionsORM(method='GET', name='get_all_languages', path='/languages/all')
-    perm2 = PermissionsORM(method='POST', name='add_language', path='/languages/add')
-    perm3 = PermissionsORM(method='DELETE', name='delete_language', path='/languages')
-    role1 = RolesORM(name='user', permissions=[perm1])
-    role2 = RolesORM(name='admin', permissions=[perm1, perm2, perm3])
+    perms = (
+        PermissionsORM(method='GET', name='get_all_languages', path='/languages/all'),
+        PermissionsORM(method='POST', name='add_language', path='/languages/add'),
+        PermissionsORM(method='DELETE', name='delete_language', path='/languages'),
+        PermissionsORM(method='GET', name='get_permissions', path='/permissions/all'),
+    )
+    roles = (
+        RolesORM(name='user', permissions=[perms[0]]),
+        RolesORM(name='admin', permissions=[perms[0], perms[1], perms[2]]),
+    )
 
     user_gen = get_user_db()
     user_db = await anext(user_gen)
@@ -27,14 +33,14 @@ async def init_data():
 
     async with db_session() as session:
         session.add_all([
-            perm1,
-            perm2,
-            perm3,
-            role1,
-            role2,
+            *perms,
+            *roles
         ])
-        await session.flush()
-        create_admin = await UserManager(user_db).create(user_create=admin_schemas)
-        #create_admin.role_id = business_settings.DEFAULT_ADMIN_ROLE_ID
         await session.commit()
 
+    await UserManager(user_db).create(user_create=admin_schemas)
+
+    async with db_session() as session:
+        stmt = update(UsersORM).filter_by(role_id=1).values(role_id=2)
+        await session.execute(stmt)
+        await session.commit()

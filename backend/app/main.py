@@ -1,6 +1,5 @@
 import fastapi
 from contextlib import asynccontextmanager
-
 from database.initial_data import init_data
 from database.utils import create_tables
 from api.v1.routers import router as api_router
@@ -14,6 +13,7 @@ async def lifespan(app: fastapi.FastAPI):
     logger.info("Starting lifespan context manager")
     await create_tables()
     await init_data()
+
     yield
     logger.info("Lifespan context manager complete")
 

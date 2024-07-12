@@ -3,3 +3,4 @@
 .env
 **/__pycache__
 backend/app/logs/
+.env.business

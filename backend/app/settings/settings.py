@@ -12,6 +12,7 @@ class _Settings(BaseSettings):
     AUTH_RESET_SECRET: str
     ENGINE_ECHO: bool = True
     ENGINE_POOL_SIZE: int = 10
+    EXPIRE_REDIS: int
     @property
     def DATABASE_URL(self):
         return f"{self.DB_DIALECT}+{self.DB_DRIVER}://{self.DB_USERNAME}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DATABASE}"
