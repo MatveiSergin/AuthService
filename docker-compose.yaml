@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: gunicorn --workers=3 -b 0.0.0.0:8000 -k uvicorn.workers.UvicornWorker backend/app/main:app
+    command: gunicorn --workers=3 -b 0.0.0.0:8000 -k uvicorn.workers.UvicornWorker ${PWD}/backend/app/main:app
     restart: unless-stopped
     ports:
       - "8000:8000"
