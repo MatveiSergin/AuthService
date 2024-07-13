@@ -4,7 +4,6 @@ from models.models import UsersORM
 from schemas.schemas import PermissionBase, ResponseSchemas, PermissionAdd
 from users import fastapi_users
 from utils.decorators import log_data, is_admin
-from cache import cache
 from fastapi.exceptions import HTTPException
 router = APIRouter(prefix='/permissions', tags=["permissions"])
 

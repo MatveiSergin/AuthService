@@ -1,5 +1,3 @@
-from sqlalchemy import select
-
 from crud.base_crud import BaseCRUD
 from models.models import PermissionsORM, RolesORM
 from schemas.schemas import PermissionBase

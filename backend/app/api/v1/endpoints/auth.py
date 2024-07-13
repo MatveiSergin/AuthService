@@ -5,7 +5,6 @@ from models.models import UsersORM, RolesORM
 from schemas.schemas import RequestAccess, ResponseCheck
 from users import fastapi_users
 from utils.decorators import log_data
-from time import time as timig
 router = APIRouter(prefix='/auth', tags=["auth"])
 
 current_user = fastapi_users.current_user()

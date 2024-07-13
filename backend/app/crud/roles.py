@@ -1,13 +1,10 @@
 from typing import Optional
-
 from sqlalchemy import select
-from sqlalchemy.orm import Session
-
 from cache import cache
 from config_log import logger
-from crud.base_crud import BaseCRUD, T, QueryValidator
+from crud.base_crud import BaseCRUD, QueryValidator
 from database.database import db_session
-from models.models import RolesORM, PermissionsORM
+from models.models import RolesORM
 from schemas.schemas import RoleBase, PermissionBase, RequestAccess
 
 

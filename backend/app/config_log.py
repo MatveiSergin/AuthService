@@ -1,5 +1,4 @@
 import logging
-
 def create_request_log():
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

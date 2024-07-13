@@ -1,6 +1,4 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
-
 class _BusinessSettings(BaseSettings):
     ADMIN_ROLE: str
     DEFAULT_USER_ROLE_ID: int
