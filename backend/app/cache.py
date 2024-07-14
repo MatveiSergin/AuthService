@@ -1,5 +1,3 @@
-import asyncio
-
 from redis import asyncio as aioredis
 from settings.settings import settings
 class Cache(aioredis.Redis):

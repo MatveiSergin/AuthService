@@ -4,3 +4,4 @@
 **/__pycache__
 backend/app/logs/
 .env.business
+.env.ubuntu
