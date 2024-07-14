@@ -11,8 +11,8 @@ from config_log import logger
 @asynccontextmanager
 async def lifespan(app: fastapi.FastAPI):
     logger.info("Starting lifespan context manager")
-    await create_tables()
-    await init_data()
+    #await create_tables()
+    #await init_data()
 
     yield
     logger.info("Lifespan context manager complete")
