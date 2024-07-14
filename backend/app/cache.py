@@ -21,6 +21,5 @@ class Cache(aioredis.Redis):
         return await super().set(name, value, ex=ex)
 
 cache = Cache()
-asyncio.run(cache.ping())
 
 
