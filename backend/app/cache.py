@@ -1,3 +1,5 @@
+import asyncio
+
 from redis import asyncio as aioredis
 from settings.settings import settings
 class Cache(aioredis.Redis):
@@ -19,8 +21,6 @@ class Cache(aioredis.Redis):
         return await super().set(name, value, ex=ex)
 
 cache = Cache()
-cache.ping()
-
-
+asyncio.run(cache.ping())
 
 
