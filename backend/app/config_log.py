@@ -2,7 +2,7 @@ import logging
 def create_request_log():
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    file_handler = logging.FileHandler("logs/AuthServiceRequests.log")
+    file_handler = logging.FileHandler("${PYTHONPATH}/logs/AuthServiceRequests.log")
     file_handler.setLevel(logging.INFO)
     logger = logging.getLogger(__name__)
     logger.addHandler(file_handler)
