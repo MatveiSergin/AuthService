@@ -1,4 +1,4 @@
-from sqlalchemy import update
+from sqlalchemy import update, select
 from database.database import db_session
 from database.utils import get_user_db
 from models.models import PermissionsORM, RolesORM, UsersORM
@@ -7,6 +7,12 @@ from users import UserManager
 from settings.business_settings import business_settings
 
 async def init_data():
+    async with db_session() as session:
+        stmt = select(PermissionsORM, 1)
+        res = await session.execute(stmt)
+        if res.all():
+            return
+
     perms = (
         PermissionsORM(method='GET', name='get_all_languages', path='/languages/all'),
         PermissionsORM(method='POST', name='add_language', path='/languages/add'),
