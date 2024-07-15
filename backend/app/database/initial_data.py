@@ -11,6 +11,13 @@ router = APIRouter(prefix="/init_data", tags=["init_data"])
 
 @router.get("/")
 async def init_data():
+    async with db_session() as session:
+        stmt = select(PermissionsORM, 1)
+        res = await session.execute(stmt)
+        data = res.all()
+        if data:
+            return
+
     perms = (
         PermissionsORM(method='GET', name='get_all_languages', path='/languages/all'),
         PermissionsORM(method='POST', name='add_language', path='/languages/add'),
@@ -40,14 +47,6 @@ async def init_data():
             *perms,
             *roles
         ])
-
-        session.refresh(PermissionsORM)
-
-        stmt = select(PermissionsORM, 1)
-        res = await session.execute(stmt)
-        data = res.all()
-        if data:
-            return
 
         await session.commit()
 
