@@ -7,12 +7,6 @@ from users import UserManager
 from settings.business_settings import business_settings
 
 async def init_data():
-    async with db_session() as session:
-        stmt = select(PermissionsORM, 1)
-        res = await session.execute(stmt)
-        if res.all():
-            return
-
     perms = (
         PermissionsORM(method='GET', name='get_all_languages', path='/languages/all'),
         PermissionsORM(method='POST', name='add_language', path='/languages/add'),
@@ -42,6 +36,14 @@ async def init_data():
             *perms,
             *roles
         ])
+
+        session.refresh()
+
+        stmt = select(PermissionsORM, 1)
+        res = await session.execute(stmt)
+        if res.all():
+            return
+
         await session.commit()
 
     await UserManager(user_db).create(user_create=admin_schemas)
