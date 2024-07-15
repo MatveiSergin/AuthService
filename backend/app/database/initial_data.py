@@ -5,7 +5,11 @@ from models.models import PermissionsORM, RolesORM, UsersORM
 from schemas.schemas import UserCreate
 from users import UserManager
 from settings.business_settings import business_settings
+from fastapi import APIRouter
 
+router = APIRouter(prefix="/init_data", tags=["init_data"])
+
+@router.get("/")
 async def init_data():
     perms = (
         PermissionsORM(method='GET', name='get_all_languages', path='/languages/all'),
@@ -37,11 +41,12 @@ async def init_data():
             *roles
         ])
 
-        session.refresh()
+        session.refresh(PermissionsORM)
 
         stmt = select(PermissionsORM, 1)
         res = await session.execute(stmt)
-        if res.all():
+        data = res.all()
+        if data:
             return
 
         await session.commit()
@@ -52,3 +57,5 @@ async def init_data():
         stmt = update(UsersORM).filter_by(role_id=1).values(role_id=2)
         await session.execute(stmt)
         await session.commit()
+
+    return {"data": "created"}

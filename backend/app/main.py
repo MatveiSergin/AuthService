@@ -6,13 +6,13 @@ from api.v1.routers import router as api_router
 from schemas.schemas import UserRead, UserCreate, UserUpdate
 from users import fastapi_users, auth_backend
 from config_log import logger
-
+from database.initial_data import router as init_router
 
 @asynccontextmanager
 async def lifespan(app: fastapi.FastAPI):
     logger.info("Starting lifespan context manager")
     await create_tables()
-    await init_data()
+    #await init_data()
     yield
     logger.info("Lifespan context manager complete")
 
@@ -44,6 +44,9 @@ app.include_router(
     fastapi_users.get_users_router(UserRead, UserUpdate),
     prefix="/users",
     tags=["users"],
+)
+app.include_router(
+    init_router
 )
 
 @app.middleware("http")
