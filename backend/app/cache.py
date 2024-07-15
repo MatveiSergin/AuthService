@@ -18,6 +18,8 @@ class Cache(aioredis.Redis):
             ex = settings.EXPIRE_REDIS
         return await super().set(name, value, ex=ex)
 
-cache = Cache()
+cache = Cache(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT)
 
 

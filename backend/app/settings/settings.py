@@ -15,6 +15,8 @@ class _Settings(BaseSettings):
     EXPIRE_REDIS: int
     PATH_TO_REQUEST_LOG: str
     PATH_TO_DATABASE_LOG: str
+    REDIS_HOST: str
+    REDIS_PORT: int
     @property
     def DATABASE_URL(self):
         return f"{self.DB_DIALECT}+{self.DB_DRIVER}://{self.DB_USERNAME}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DATABASE}"
