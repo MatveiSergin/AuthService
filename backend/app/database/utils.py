@@ -5,8 +5,7 @@ from database.database import engine, ModelORM, db_session
 from models.models import UsersORM
 
 async def create_tables():
-    async with engine.begin() as conn:
-        await conn.run_sync(ModelORM.metadata.drop_all)
+    async with engine.begin() as conn:2
         await conn.run_sync(ModelORM.metadata.create_all)
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
