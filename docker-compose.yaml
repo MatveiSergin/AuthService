@@ -36,7 +36,7 @@ services:
       - ./redis/data:/data
       - ./redis:/usr/local/etc/redis
     ports:
-      - "6379:6379"
+      - "6380:6379"
     command: redis-server /usr/local/etc/redis/redis.conf
 volumes:
   postgres_data:
