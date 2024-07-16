@@ -5,3 +5,4 @@
 backend/app/logs/
 .env.business
 .env.ubuntu
+redis/redis.conf
