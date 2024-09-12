@@ -1,6 +1,5 @@
 import fastapi
 from contextlib import asynccontextmanager
-from database.initial_data import init_data
 from database.utils import create_tables
 from api.v1.routers import router as api_router
 from schemas.schemas import UserRead, UserCreate, UserUpdate
@@ -22,7 +21,9 @@ app = fastapi.FastAPI(
 app.include_router(api_router, prefix="/api/v1", tags=["ApiActions"])
 
 app.include_router(
-    fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"]
+    fastapi_users.get_auth_router(auth_backend),
+    prefix="/auth/jwt",
+    tags=["auth"]
 )
 app.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),

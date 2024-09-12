@@ -65,3 +65,4 @@ class RequestAccess(BaseModel):
         return f"path: {self.path}, method: {self.method}"
 class ResponseCheck(BaseModel):
     success: bool
+    user_id: uuid.UUID

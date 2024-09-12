@@ -18,4 +18,5 @@ async def check_access(data: RequestAccess, user: UsersORM = Depends(current_use
         return ResponseCheck(success=cache_success)
     success: bool = await RolesCRUD.check_permissions(role, data)
     await cache.set(f"check_access_for_{repr(data)}", int(success))
-    return ResponseCheck(success=success)
+    return ResponseCheck(success=success,
+                         user_id=user.id)

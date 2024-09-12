@@ -19,14 +19,12 @@ async def init_data():
             return
 
     perms = (
-        PermissionsORM(method='GET', name='get_all_languages', path='/languages/all'),
-        PermissionsORM(method='POST', name='add_language', path='/languages/add'),
-        PermissionsORM(method='DELETE', name='delete_language', path='/languages'),
-        PermissionsORM(method='GET', name='get_permissions', path='/permissions/all'),
+        PermissionsORM(method='GET', name='main_page', path='/'),
+        PermissionsORM(method='POST', name='upload_file', path='/'),
     )
     roles = (
-        RolesORM(name='user', permissions=[perms[0]]),
-        RolesORM(name='admin', permissions=[perms[0], perms[1], perms[2]]),
+        RolesORM(name='user', permissions=[perms[0], perms[1]]),
+        RolesORM(name='admin', permissions=[perms[0], perms[1]]),
     )
 
     user_gen = get_user_db()
